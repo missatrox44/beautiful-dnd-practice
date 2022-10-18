@@ -7,7 +7,7 @@ import Column from './column';
 
 class App extends React.Component {
   state = initialData;
-//only required callback
+  //only required callback
   onDragEnd = result => {
     //TODO: reorder our column
   }

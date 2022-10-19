@@ -14,7 +14,9 @@ const Container = styled.div`
 class InnerList extends React.PureComponent {
   render() {
     const { column, taskMap, index } = this.props;
+    //make copy of taskId array -> perform this function on each index
     const tasks = column.taskIds.map(taskId => taskMap[taskId]);
+    //populate dynamic info
     return <Column column={column} tasks={tasks} index={index} />;
   }
 }
@@ -23,14 +25,14 @@ class App extends React.Component {
   state = initialData
 
   onDragStart = (start, provided) => {
-    provided.announce(`You have lifted the task in position ${start.source.index + 1}`,
+    provided.announce(console.log(`You have lifted the task in position ${start.source.index + 1}`),
     );
   };
 
   onDragUpdate = (update, provided) => {
     const message = update.destination
-      ? `You have moved the task to position ${update.destination.index + 1}`
-      : `You are currently not over a droppable area`;
+      ? console.log(`You have moved the task to position ${update.destination.index + 1}`)
+      : console.log(`You are currently not over a droppable area`);
 
     provided.announce(message);
   };
@@ -43,14 +45,14 @@ class App extends React.Component {
             ${result.source.index + 1}`;
 
     provided.announce(message);
-//info interested in from result object
+    //info interested in from result object
     const { destination, source, draggableId, type } = result
-//if no destination -> nothing to do
+    //if no destination -> nothing to do
     if (!destination) {
       return
     }
-//check if location of the draggable changed
-//user dropped item in same place where it started
+    //check if location of the draggable changed
+    //user dropped item in same place where it started
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
@@ -63,10 +65,12 @@ class App extends React.Component {
       newColumnOrder.splice(source.index, 1);
       newColumnOrder.splice(destination.index, 0, draggableId);
 
+      //making copy of inital data columnOrder, updating column position
       const newState = {
         ...this.state,
         columnOrder: newColumnOrder,
       };
+      //new position persists
       this.setState(newState);
       return;
     }
